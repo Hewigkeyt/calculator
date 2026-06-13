@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Odds Multiplier — Settle the Argument</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0D1B2A;
+      --surface:  #162437;
+      --surface2: #1E3045;
+      --gold:     #F5C518;
+      --gold-dim: #B8920F;
+      --orange:   #FF6B35;
+      --text:     #EEF2F7;
+      --muted:    #7A9AB8;
+      --error:    #FF4D6D;
+      --radius:   12px;
+    }
+
+    html { font-size: 16px; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 16px 80px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      max-width: 680px;
+      width: 100%;
+      text-align: center;
+      padding: 40px 0 48px;
+    }
+
+    .hero-eyebrow {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+    }
+
+    .hero-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 10vw, 5.5rem);
+      line-height: 0.95;
+      letter-spacing: 0.02em;
+      color: var(--text);
+      margin-bottom: 28px;
+    }
+
+    .hero-title span {
+      color: var(--gold);
+    }
+
+    .hero-story {
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: var(--muted);
+      max-width: 560px;
+      margin: 0 auto 12px;
+    }
+
+    .hero-story strong {
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .hero-cta-line {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--orange);
+      margin-top: 16px;
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid rgba(245, 197, 24, 0.12);
+      border-radius: var(--radius);
+      padding: 36px 32px;
+      max-width: 600px;
+      width: 100%;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .field.full-width {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    input[type="number"] {
+      background: var(--surface2);
+      border: 2px solid transparent;
+      border-radius: 8px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      padding: 12px 16px;
+      width: 100%;
+      outline: none;
+      transition: border-color 0.2s;
+      -moz-appearance: textfield;
+    }
+
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+    }
+
+    input[type="number"]:focus {
+      border-color: var(--gold);
+    }
+
+    .field-hint {
+      font-size: 0.75rem;
+      color: var(--muted);
+      opacity: 0.7;
+    }
+
+    .divider {
+      grid-column: 1 / -1;
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      margin: 4px 0;
+    }
+
+    .checkbox-row {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      user-select: none;
+      padding: 8px 0;
+    }
+
+    .checkbox-row input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      accent-color: var(--gold);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .checkbox-label {
+      font-size: 0.9rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .checkbox-label strong {
+      color: var(--text);
+    }
+
+    .btn-calculate {
+      grid-column: 1 / -1;
+      background: var(--gold);
+      color: #0D1B2A;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      letter-spacing: 0.08em;
+      border: none;
+      border-radius: 8px;
+      padding: 16px;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+      margin-top: 8px;
+    }
+
+    .btn-calculate:hover { background: #ffd633; }
+    .btn-calculate:active { transform: scale(0.98); }
+
+    /* ── RESULT ── */
+    .result-box {
+      max-width: 600px;
+      width: 100%;
+      margin-top: 24px;
+      border-radius: var(--radius);
+      padding: 32px;
+      text-align: center;
+      display: none;
+      animation: fadeUp 0.35s ease both;
+    }
+
+    .result-box.success {
+      background: linear-gradient(135deg, #1a2f10 0%, #162437 100%);
+      border: 1px solid rgba(132, 220, 50, 0.25);
+    }
+
+    .result-box.error {
+      background: linear-gradient(135deg, #2d0f18 0%, #1a1428 100%);
+      border: 1px solid rgba(255, 77, 109, 0.3);
+    }
+
+    .result-multiplier {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4rem, 14vw, 7rem);
+      line-height: 1;
+      color: var(--gold);
+      letter-spacing: 0.02em;
+      /* the jackpot glow */
+      text-shadow: 0 0 40px rgba(245, 197, 24, 0.4);
+    }
+
+    .result-multiplier .unit {
+      font-size: 0.5em;
+      color: var(--gold-dim);
+      vertical-align: middle;
+    }
+
+    .result-sentence {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: var(--muted);
+      margin-top: 12px;
+    }
+
+    .result-sentence strong {
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .result-sentence em {
+      color: var(--orange);
+      font-style: normal;
+      font-weight: 700;
+    }
+
+    .error-icon {
+      font-size: 2.5rem;
+      margin-bottom: 12px;
+    }
+
+    .error-msg {
+      font-size: 1rem;
+      color: var(--error);
+      font-weight: 500;
+      line-height: 1.6;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      margin-top: 56px;
+      font-size: 0.75rem;
+      color: var(--muted);
+      opacity: 0.4;
+      text-align: center;
+    }
+
+    @media (max-width: 480px) {
+      .card { padding: 24px 20px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .field.full-width,
+      .checkbox-row,
+      .btn-calculate { grid-column: 1; }
+    }
+
+    .disclaimer-box {
+      margin-top: 28px;
+      background: rgba(245, 197, 24, 0.07);
+      border: 1px solid rgba(245, 197, 24, 0.2);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      text-align: left;
+    }
+
+    .disclaimer-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+
+    .disclaimer-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .disclaimer-list li {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.6;
+      padding-left: 16px;
+      position: relative;
+    }
+
+    .disclaimer-list li::before {
+      content: '–';
+      position: absolute;
+      left: 0;
+      color: var(--gold-dim);
+    }
+
+    .disclaimer-list li strong {
+      color: var(--text);
+    }
+
+    .disclaimer-list li em {
+      color: var(--orange);
+      font-style: normal;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <header class="hero">
+    <p class="hero-eyebrow">A Calculator for Winning Arguments</p>
+    <h1 class="hero-title">Your friend is <span>wrong.</span><br>Now prove it.</h1>
+    <p class="hero-story">
+      You know that one person. The one who genuinely believes that <strong>trying 5 times gives you 5× the odds</strong>.
+      You know they're wrong. You open your mouth to explain it — and then your brain just... leaves.
+      Suddenly you're mumbling something about logarithms, they're giving you that look, and somehow <em>you</em> end up looking like the idiot.
+    </p>
+    <p class="hero-cta-line">This page is for you. You're welcome.</p>
+
+    <div class="disclaimer-box">
+      <p class="disclaimer-title">⚠️ When your friend is actually (kind of) right</p>
+      <ul class="disclaimer-list">
+        <li><strong>Very low base odds or B = 1:</strong> when the probability of winning is tiny, the naive "×A/B" estimate is nearly accurate — the gap only becomes meaningful at moderate-to-high base probabilities, or when B is already large.</li>
+        <li><strong>Without replacement with X = 1:</strong> if there's only one winning outcome, drawing more times is <em>exactly</em> linear. Going from 1 to 3 draws really is exactly 3× as likely. Don't argue that one.</li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- FORM CARD -->
+  <main>
+    <div class="card">
+      <div class="form-grid">
+
+        <div class="field">
+          <label for="x">Winning outcomes (X)</label>
+          <input type="number" id="x" placeholder="1" min="1" />
+          <span class="field-hint">e.g. 1 golden ticket…</span>
+        </div>
+
+        <div class="field">
+          <label for="y">Total outcomes (Y)</label>
+          <input type="number" id="y" placeholder="100" min="1" />
+          <span class="field-hint">…out of 100 tickets</span>
+        </div>
+
+        <hr class="divider" />
+
+        <div class="field">
+          <label for="a">New number of tries (A)</label>
+          <input type="number" id="a" placeholder="10" min="1" />
+          <span class="field-hint">The "more" amount</span>
+        </div>
+
+        <div class="field">
+          <label for="b">Reference tries (B)</label>
+          <input type="number" id="b" placeholder="1" min="1" />
+          <span class="field-hint">What you're comparing to</span>
+        </div>
+
+        <label class="checkbox-row">
+          <input type="checkbox" id="noReplacement" />
+          <span class="checkbox-label"><strong>Without replacement</strong> — each try removes one outcome</span>
+        </label>
+
+        <button class="btn-calculate" onclick="calculate()">Calculate</button>
+
+      </div>
+    </div>
+
+    <!-- RESULT -->
+    <div class="result-box" id="result"></div>
+  </main>
+
+  <footer>Math is free. Being right is priceless.</footer>
+
+  <script>
+    const insults = {
+      xGtY: [
+        "X greater than Y? So your odds are over 100%? Incredible. Truly. Physics majors everywhere are weeping.",
+        "More winners than total outcomes? Congratulations, you've broken mathematics. It cannot be fixed.",
+        "X can't be bigger than Y. That's not a probability, that's a cry for help.",
+      ],
+      xZero: [
+        "Zero winning outcomes. Zero probability. Zero improvement no matter how many times you try. Math is brutal like that.",
+        "X = 0 means it's literally impossible. Trying a trillion times still gives you nothing. Sorry.",
+        "If there are zero ways to win, there are zero ways to win more. That's not a calculator problem, that's a life problem.",
+      ],
+      xEqY: [
+        "X equals Y means you win every single time. The only improvement from trying more is a sore wrist.",
+        "100% chance every try? A is Z × more likely than B, where Z = 1. You already know what 1× means.",
+        "If it's guaranteed every time, trying more doesn't make it 'more guaranteed'. It's already maxed out.",
+      ],
+      aEqB: [
+        "A equals B. You're comparing a thing to itself. The answer is 1×. You didn't need a calculator for this.",
+        "Same number of tries, same odds. This is either a philosophical statement or a mistake.",
+        "A = B means zero difference. Groundbreaking.",
+      ],
+      notPositive: [
+        "Please enter numbers above zero. Negative tries is not a concept that exists in this universe.",
+        "All values must be positive integers. Non-negotiable. I don't make the rules, math does.",
+        "I need real numbers. Positive ones. The kind that exist.",
+      ],
+      notIntegers: [
+        "Whole numbers only, please. Half an outcome isn't a thing.",
+        "Integers. Whole. Numbers. No decimals. Thank you.",
+        "I appreciate the creativity, but I need whole numbers here.",
+      ],
+      noReplacementAGtY: [
+        "Without replacement, you can't draw more times than there are total outcomes. That's literally what 'without replacement' means.",
+        "A is larger than Y, and you checked 'without replacement'. You'd run out of things to draw. Think it through.",
+        "More draws than total outcomes, without replacement? You'd empty the entire pool. Try a smaller A.",
+      ],
+      noReplacementBGtY: [
+        "Even B is larger than Y here. Without replacement, you can't draw more times than there are items. Start over.",
+        "B > Y with no replacement. That's already impossible. Fix B first.",
+      ],
+    };
+
+    function randomInsult(key) {
+      const list = insults[key];
+      return list[Math.floor(Math.random() * list.length)];
+    }
+
+    function showError(emoji, msg) {
+      const box = document.getElementById('result');
+      box.className = 'result-box error';
+      box.style.display = 'block';
+      box.innerHTML = `<div class="error-icon">${emoji}</div><p class="error-msg">${msg}</p>`;
+    }
+
+    function probWith(x, y, n) {
+      return 1 - Math.pow(1 - x / y, n);
+    }
+
+    function probWithout(x, y, n) {
+      // P(at least 1 winner in n draws without replacement)
+      // = 1 - C(y-x, n) / C(y, n)
+      // = 1 - product_{i=0}^{n-1} of (y - x - i) / (y - i)
+      if (n > y - x) return 1; // guaranteed to hit at least one
+      let complement = 1;
+      for (let i = 0; i < n; i++) {
+        complement *= (y - x - i) / (y - i);
+      }
+      return 1 - complement;
+    }
+
+    function animateNumber(el, target, suffix) {
+      const duration = 900;
+      const start = performance.now();
+      const from = 1;
+
+      function step(now) {
+        const progress = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const current = from + (target - from) * eased;
+        el.textContent = current.toFixed(2) + suffix;
+        if (progress < 1) requestAnimationFrame(step);
+        else el.textContent = target.toFixed(2) + suffix;
+      }
+      requestAnimationFrame(step);
+    }
+
+    function calculate() {
+      const xRaw = document.getElementById('x').value.trim();
+      const yRaw = document.getElementById('y').value.trim();
+      const aRaw = document.getElementById('a').value.trim();
+      const bRaw = document.getElementById('b').value.trim();
+      const noReplace = document.getElementById('noReplacement').checked;
+
+      // Parse
+      const x = Number(xRaw);
+      const y = Number(yRaw);
+      const a = Number(aRaw);
+      const b = Number(bRaw);
+
+      // Basic presence & positivity
+      if (!xRaw || !yRaw || !aRaw || !bRaw ||
+          isNaN(x) || isNaN(y) || isNaN(a) || isNaN(b) ||
+          x <= 0 || y <= 0 || a <= 0 || b <= 0) {
+        showError('🤦', randomInsult('notPositive'));
+        return;
+      }
+
+      // Integer check
+      if (!Number.isInteger(x) || !Number.isInteger(y) || !Number.isInteger(a) || !Number.isInteger(b)) {
+        showError('🔢', randomInsult('notIntegers'));
+        return;
+      }
+
+      // X > Y
+      if (x > y) {
+        showError('💀', randomInsult('xGtY'));
+        return;
+      }
+
+      // X = 0 (already caught by > 0, but just in case)
+      if (x === 0) {
+        showError('😐', randomInsult('xZero'));
+        return;
+      }
+
+      // X = Y → 100%
+      if (x === y) {
+        showError('🙄', randomInsult('xEqY'));
+        return;
+      }
+
+      // A = B
+      if (a === b) {
+        showError('😶', randomInsult('aEqB'));
+        return;
+      }
+
+      // Without replacement constraints
+      if (noReplace) {
+        if (b > y) {
+          showError('🤯', randomInsult('noReplacementBGtY'));
+          return;
+        }
+        if (a > y) {
+          showError('🤯', randomInsult('noReplacementAGtY'));
+          return;
+        }
+      }
+
+      // Compute probabilities
+      let pA, pB;
+      if (noReplace) {
+        pA = probWithout(x, y, a);
+        pB = probWithout(x, y, b);
+      } else {
+        pA = probWith(x, y, a);
+        pB = probWith(x, y, b);
+      }
+
+      // Edge: pB = 0 (shouldn't happen since x>0 and b>0 but just in case)
+      if (pB === 0) {
+        showError('🧮', "The reference probability is exactly zero, which makes division impossible. Try different values.");
+        return;
+      }
+
+      const ratio = pA / pB;
+      const replaceLabel = noReplace ? 'without replacement' : 'with replacement';
+
+      const box = document.getElementById('result');
+      box.style.display = 'none';
+      box.className = 'result-box success';
+
+      let directionText, outcomeNote;
+      if (ratio > 1) {
+        directionText = `more likely`;
+        outcomeNote = `That's not simply ×${(a/b) % 1 === 0 ? a/b : (a/b).toFixed(1)}. Now you know.`;
+      } else if (ratio < 1) {
+        directionText = `times as likely — wait, that's <em>less</em>`;
+        outcomeNote = `You somehow asked for fewer tries with a higher "reference". The math doesn't lie, even if you do.`;
+      } else {
+        directionText = `times as likely (so... exactly the same)`;
+        outcomeNote = `Same probability both ways. Impressive consistency in your wrongness.`;
+      }
+
+      const pAPercent = (pA * 100).toFixed(4);
+      const pBPercent = (pB * 100).toFixed(4);
+
+      box.innerHTML = `
+        <div class="result-multiplier" id="animNum">…</div>
+        <p class="result-sentence">
+          Trying <strong>${a}×</strong> instead of <strong>${b}×</strong> makes you
+          <em>${directionText}</em> to win<br/>
+          (${replaceLabel}, <strong>${x}/${y}</strong> base odds)
+        </p>
+        <p class="result-sentence" style="margin-top:10px; font-size:0.85rem; opacity:0.6;">
+          P(win in ${a} tries) = ${pAPercent}% &nbsp;|&nbsp; P(win in ${b} tries) = ${pBPercent}%
+        </p>
+        <p class="result-sentence" style="margin-top:16px; color: var(--orange); font-weight:700;">
+          ${outcomeNote}
+        </p>
+      `;
+
+      // force reflow so animation fires fresh
+      void box.offsetWidth;
+      box.style.display = 'block';
+
+      const numEl = document.getElementById('animNum');
+      animateNumber(numEl, ratio, '×');
+    }
+
+    // Allow Enter key to trigger calculate
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') calculate();
+    });
+  </script>
+</body>
+</html>
