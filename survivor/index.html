@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detecting Survivorship Bias</title>
+    <style>
+        :root {
+            --bg-color: #f4f6f9;
+            --card-bg: #ffffff;
+            --text-color: #2c3e50;
+            --correct-color: #27ae60;
+            --incorrect-color: #e74c3c;
+            --border-color: #dcdde1;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            color: #1a252f;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+        }
+
+        /* Flowchart */
+        .flowchart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 40px;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .step {
+            background: #e8f0fe;
+            border: 2px solid #3498db;
+            padding: 15px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            text-align: center;
+            max-width: 450px;
+        }
+
+        .arrow {
+            font-size: 24px;
+            color: #3498db;
+            margin: 10px 0;
+        }
+
+        .branches {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            gap: 20px;
+            margin-top: 10px;
+        }
+
+        .branch {
+            flex: 1;
+            padding: 20px;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .branch.yes {
+            background-color: #edf7ed;
+            border: 2px solid var(--correct-color);
+            color: #1e4620;
+        }
+
+        .branch.no {
+            background-color: #fdeded;
+            border: 2px solid var(--incorrect-color);
+            color: #5f2120;
+        }
+
+        /* Case Studies */
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-top: 5px solid var(--border-color);
+        }
+
+        .card.correct { border-top-color: var(--correct-color); }
+        .card.incorrect { border-top-color: var(--incorrect-color); }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        .correct .badge { background: #edf7ed; color: var(--correct-color); }
+        .incorrect .badge { background: #fdeded; color: var(--incorrect-color); }
+
+        h2 { margin-top: 0; font-size: 1.3rem; }
+
+        .example-box {
+            background: #f8f9fa;
+            border-left: 3px solid #3498db;
+            padding: 10px 15px;
+            margin: 15px 0;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .grid, .branches { grid-template-columns: 1fr; flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Is It Actually "Survivorship Bias"?</h1>
+        <p class="subtitle">A logical framework to spot correct vs. faulty arguments.</p>
+    </header>
+
+    <section class="flowchart">
+        <div class="step">Does the argument draw a conclusion about a process based only on the individuals who "survived" it?</div>
+        <div class="arrow">↓</div>
+        <div class="step">Would looking at the "failures" completely change or disprove that specific conclusion?</div>
+        <div class="arrow">↓</div>
+        <div class="branches">
+            <div class="branch yes">
+                YES to both<br>
+                ➔ Valid Use of Survivorship Bias
+            </div>
+            <div class="branch no">
+                NO (The exceptions are statistically irrelevant or don't change the baseline conclusion)<br>
+                ➔ Faulty Use / Different Fallacy
+            </div>
+        </div>
+    </section>
+
+    <div class="grid">
+	<div class="card correct">
+            <span class="badge">Correct / Valid Use</span>
+            <h2>Career Success & Personal Advice</h2>
+            <div class="example-box">
+                "Anyone can get an admirable, high-paying job if they just work hard and network relentlessly. Look at this successful CEO who started with nothing."
+                <br><br>
+                <strong>Counter-argument:</strong> "That's survivorship bias. You're only looking at the one person who made it to the top. Thousands of others worked just as hard and did the exact same things but never got the job due to bad timing, market shifts, or lack of connections."
+            </div>
+            <p><strong>Why it's correct:</strong> The original argument claims a specific method guarantees success by analyzing only the "survivor" who crossed the finish line.</p>
+            <p><strong>What is hidden:</strong> Looking at the "failures" completely disproves the claim; it reveals that the strategy alone does not guarantee the outcome, because the graveyard of people who followed the exact same path is completely ignored.</p>
+        </div>
+
+        <div class="card incorrect">
+            <span class="badge">Misuse / Misapplied</span>
+            <h2>School System & Marginalized Exclusions</h2>
+            <div class="example-box">
+                "The education system is decent because virtually all children have free access to it." <br><br>
+		<strong>Counter-argument:</strong> "That's survivorship bias, you're ignoring undocumented kids outside the system."
+            </div>
+            <p><strong>Why it's incorrect:</strong> The system didn't apply a selection filter to produce "survivors" here. The main claim is about overall institutional reach and baseline coverage.</p>
+            <p><strong>The actual concept:</strong> This is a debate over sample representation or the <em>accident fallacy</em> (using a statistically miniscule exception to reject a valid general baseline).</p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
