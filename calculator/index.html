@@ -132,8 +132,22 @@
       padding: 12px 16px;
       width: 100%;
       outline: none;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, background 0.2s;
       -moz-appearance: textfield;
+    }
+
+    /* Style the placeholder text: lighter, italic, obviously not real data */
+    input[type="number"]::placeholder {
+      color: var(--muted);
+      opacity: 0.35;
+      font-weight: 400;
+      font-style: italic;
+    }
+
+    /* When field has actual input, highlight it */
+    input[type="number"]:not(:placeholder-shown) {
+      border-color: var(--gold);
+      background: rgba(245, 197, 24, 0.05);
     }
 
     input[type="number"]::-webkit-outer-spin-button,
@@ -373,13 +387,13 @@
 
         <div class="field">
           <label for="x">Winning outcomes (X)</label>
-          <input type="number" id="x" placeholder="1" min="1" />
+          <input type="number" id="x" placeholder="e.g., 1" min="1" />
           <span class="field-hint">e.g. 1 golden ticket…</span>
         </div>
 
         <div class="field">
           <label for="y">Total outcomes (Y)</label>
-          <input type="number" id="y" placeholder="100" min="1" />
+          <input type="number" id="y" placeholder="e.g., 100" min="1" />
           <span class="field-hint">…out of 100 tickets</span>
         </div>
 
@@ -387,13 +401,13 @@
 
         <div class="field">
           <label for="a">New number of tries (A)</label>
-          <input type="number" id="a" placeholder="10" min="1" />
+          <input type="number" id="a" placeholder="e.g., 10" min="1" />
           <span class="field-hint">The "more" amount</span>
         </div>
 
         <div class="field">
           <label for="b">Reference tries (B)</label>
-          <input type="number" id="b" placeholder="1" min="1" />
+          <input type="number" id="b" placeholder="e.g., 1" min="1" />
           <span class="field-hint">What you're comparing to</span>
         </div>
 
