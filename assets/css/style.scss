@@ -1,0 +1,15 @@
+---
+---
+@import "{{ site.theme }}";
+
+// Your dark theme overrides here
+:root {
+  --bg: #0D1B2A;
+  --text: #EEF2F7;
+  --gold: #F5C518;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+}
