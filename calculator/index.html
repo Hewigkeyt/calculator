@@ -199,7 +199,7 @@
     </p>
     <p class="hero-cta">This page is for you. You're welcome.</p>
 
-    <div class="info-box">
+    <div class="info-box" style="margin-top: 20px;">
       <p class="info-box-title">⚠️ When your friend is actually (kind of) right</p>
       <ul class="info-list">
         <li><strong>Very low base odds or B = 1:</strong> when the probability of winning is tiny, the naive "×A/B" estimate is nearly accurate — the gap only becomes meaningful at moderate-to-high base probabilities, or when B is already large.</li>
@@ -215,28 +215,28 @@
 
         <div class="field">
           <label for="x">Winning outcomes (X)</label>
-          <input type="number" id="x" placeholder="e.g., 1" min="1" />
-          <span class="field-hint">e.g. 1 golden ticket…</span>
+          <input type="number" id="x" placeholder="Example: 3" min="1" />
+          <span class="field-hint">e.g. 3% of…</span>
         </div>
 
         <div class="field">
           <label for="y">Total outcomes (Y)</label>
-          <input type="number" id="y" placeholder="e.g., 100" min="1" />
-          <span class="field-hint">…out of 100 tickets</span>
+          <input type="number" id="y" placeholder="Example: 100" min="1" />
+          <span class="field-hint">…chances getting a SSR gacha.</span>
         </div>
 
         <hr class="divider" />
 
         <div class="field">
           <label for="a">New number of tries (A)</label>
-          <input type="number" id="a" placeholder="e.g., 10" min="1" />
-          <span class="field-hint">The "more" amount</span>
+          <input type="number" id="a" placeholder="Example: 30" min="1" />
+          <span class="field-hint">When doing 3 10-rolls…</span>
         </div>
 
         <div class="field">
           <label for="b">Reference tries (B)</label>
-          <input type="number" id="b" placeholder="e.g., 1" min="1" />
-          <span class="field-hint">What you're comparing to</span>
+          <input type="number" id="b" placeholder="Example: 10" min="1" />
+          <span class="field-hint">…instead of 1 10-roll.</span>
         </div>
 
         <label class="checkbox-row">
@@ -409,17 +409,17 @@
       }
 
       const ratio = pA / pB;
+      const nativeRatio = a / b;
       const replaceLabel = noReplace ? 'without replacement' : 'with replacement';
-
       const box = document.getElementById('result');
       box.style.display = 'none';
       box.className = 'result-box success';
 
       let directionText, outcomeNote;
-      if (ratio > 1) {
+      if (ratio < nativeRatio) {
         directionText = `more likely`;
         outcomeNote = `That's not simply ×${(a/b) % 1 === 0 ? a/b : (a/b).toFixed(1)}. Now you know.`;
-      } else if (ratio < 1) {
+      } else if (ratio > nativeRatio) {
         directionText = `times as likely — wait, that's <em>less</em>`;
         outcomeNote = `You somehow asked for fewer tries with a higher "reference". The math doesn't lie, even if you do.`;
       } else {
